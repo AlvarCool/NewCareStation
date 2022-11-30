@@ -1,0 +1,38 @@
+
+    if(isset($_POST['btningresar'])){
+        $dbhost = "dbcare.mysql.database.azure.com";
+        $dbuser = "Care@dbcare";
+        $dbpass = "1q2w3e4r!";
+        $dbname = "care-station";
+
+        $con = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+        if(!$con){
+            die("No hay conexion: ".mysqli_connect_error());
+        }
+        
+        $usuario = $_POST['usuario'];
+        $contraseña = $_POST['contraseña'];
+
+        $query = mysqli_query($con, "SELECT * FROM usuarios WHERE usuario = '".$usuario."' and password = '".$contraseña."'");
+        $row = mysqli_fetch_array($query);
+
+        if($row == true){
+            $usuarioactivo = $row[1];
+            $rol = $row[3];
+
+            $_SESSION['rol'] = $rol;
+            $_SESSION['usuarioactivo'] = $usuarioactivo;
+
+            switch($_SESSION['rol']){
+                case 0:
+                    header("location:dash_user.php");
+                    break;
+                case 1:
+                    header("location:dash_admin.php");
+                    break;
+            }
+        }
+        else if ($row == false){
+            echo "<script>alert ('Usuario y/o contraseña incorrecta');window.location = 'index.php'</script>";
+        }
+    }
