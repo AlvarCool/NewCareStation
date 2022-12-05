@@ -1,8 +1,15 @@
-
 <?php
   session_start();
   if(!isset($_SESSION['privilegio'])){
-      header("location: index.php");
+      header("location: login.php");
+    }else{
+      if($_SESSION['privilegio'] != 1){
+        $dash = "dash_user.php";
+        $ocultar = "hidden";
+      }else{
+        $dash = "dash_admin.php";
+        $ocultar = "";
+      }
     }
 ?>
 
@@ -33,17 +40,15 @@
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="dashboard.php" target="_blank">
+      <a class="navbar-brand m-0" href="../pages/<?php echo $dash ?>" target="_blank">
         <img src="../assets/img/icons/planta.png" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">Care Sation</span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-      <ul class="navbar-nav">
+    <ul class="navbar-nav">
         <li class="nav-item">
-          <?php 
-          ?>
           <a class="nav-link" href="../pages/dash_admin.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -60,27 +65,27 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../pages/zan.php">
+          <a class="nav-link" href="../pages/graficas.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Graficas</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../pages/alta-usuario.php">
+        <li <?php echo $ocultar ?> class="nav-item">
+          <a class="nav-link" href="../pages/usuarios.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Alta de usuario</span>
+            <span class="nav-link-text ms-1">Usuarios</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../pages/alta-nodo.php">
+        <li <?php echo $ocultar ?> class="nav-item">
+          <a class="nav-link" href="../pages/nodos.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Alta de nodo</span>
+            <span class="nav-link-text ms-1">Nodos</span>
           </a>
         </li>
         <li class="nav-item">
@@ -116,7 +121,7 @@
         <div class="col-12">
           <div class="card mb-5">
             <div class="card-header pb-0">
-              <h6>Temperatura</h6>
+              <h6>Temperatura</h6>              
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive p-0">
@@ -170,6 +175,9 @@
                     </tr>
                     <?php }?>
                 </table>
+                  <div style="text-align: right; margin-right: 70px;">
+                    <a <?php echo $ocultar ?> href="informacion.php?sensor=temp" type="submit" name="sensor" class="btn btn-primary w-20 mt-2 mb-0">Ver</a>
+                  </div>
                 <?php }?>
               </div>
             </div>
@@ -221,6 +229,9 @@
                     </tr>
                     <?php }?>
                 </table>
+                  <div style="text-align: right; margin-right: 70px;">
+                    <a <?php echo $ocultar ?> href="informacion.php?sensor=hum" type="submit" name="sensor" class="btn btn-primary w-20 mt-2 mb-0">Ver</a>
+                  </div>
                 <?php }?>
               </div>
             </div>
@@ -272,6 +283,9 @@
                     </tr>
                     <?php }?>
                 </table>
+                  <div style="text-align: right; margin-right: 70px;">
+                    <a <?php echo $ocultar ?> href="informacion.php?sensor=humrel" type="submit" name="sensor" class="btn btn-primary w-20 mt-2 mb-0">Ver</a>
+                  </div>
                 <?php }?>
               </div>
             </div>
@@ -323,6 +337,9 @@
                     </tr>
                     <?php }?>
                 </table>
+                  <div style="text-align: right; margin-right: 70px;">
+                    <a <?php echo $ocultar ?> href="informacion.php?sensor=uv" type="submit" name="sensor" class="btn btn-primary w-20 mt-2 mb-0">Ver</a>
+                  </div>
                 <?php }?>
               </div>
             </div>

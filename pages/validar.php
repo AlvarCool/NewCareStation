@@ -24,31 +24,27 @@
         die("No hay conexion: ".mysqli_connect_error());
     }
 
-    $query = mysqli_query($db, "SELECT * FROM usuarios WHERE usuario = '".$usuario."' and contrasena = '".$contraseña."'");
+    $query = mysqli_query($db, "SELECT * FROM usuarios WHERE usuario = '".$usuario."'");
     $row = mysqli_fetch_array($query);
     
-    if($row == true){
 
-        $rol = $row[3];
-        
-        $_SESSION['privilegio'] = $rol;
+    if(password_verify($contraseña,$row['contrasena'])){
+      if($row == true){
 
-        switch($_SESSION['privilegio']){
-            case 0:
-                header("location: dash_user.php");
-                break;
-            case 1:
-                header("location: dash_admin.php");
-                break;
+          $rol = $row[3];
+          
+          $_SESSION['privilegio'] = $rol;
 
-            default:
-          }
+          header("location: dash_admin.php");
 
+      }else{
+
+          echo "<script>alert ('Usuario y/o contraseña incorrecta');window.location = 'login.php'</script>";
+          mysqli_close($db);
+      }
     }else{
-
-        echo "<script>alert ('Usuario y/o contraseña incorrecta');window.location = 'login.php'</script>";
-
+      echo "<script>alert ('Usuario y/o contraseña incorrecta');window.location = 'login.php'</script>";
+      mysqli_close($db);
     }
-    mysqli_close($db);
   }
 ?>

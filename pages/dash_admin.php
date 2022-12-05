@@ -1,11 +1,12 @@
-
 <?php
   session_start();
   if(!isset($_SESSION['privilegio'])){
-      header("location: index.php");
+      header("location: login.php");
     }else{
       if($_SESSION['privilegio'] != 1){
-        header("location: index.php");
+        $ocultar = "hidden";
+      }else{
+        $ocultar = "";
       }
     }
 ?>
@@ -39,7 +40,7 @@
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="dashboard.php" target="_blank">
+      <a class="navbar-brand m-0" href="../pages/dash_admin">
         <img src="../assets/img/icons/planta.png" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">Care Sation</span>
       </a>
@@ -64,27 +65,27 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../pages/zan.php">
+          <a class="nav-link" href="../pages/graficas.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Graficas</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../pages/alta-nodo.php">
+        <li <?php echo $ocultar ?> class="nav-item">
+          <a class="nav-link" href="../pages/usuarios.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Alta de nodo</span>
+            <span class="nav-link-text ms-1">Usuarios</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="../pages/alta-usuario.php">
+        <li <?php echo $ocultar ?> class="nav-item">
+          <a class="nav-link" href="../pages/nodos.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Alta de usuarios</span>
+            <span class="nav-link-text ms-1">Nodos</span>
           </a>
         </li>
         <li class="nav-item">
@@ -114,6 +115,24 @@
         </div>
       </div>
     </nav>
+    <?php
+        $dbhost = "carestation.mysql.database.azure.com";
+        $dbuser = "ubuntu";
+        $dbpass = "ubnt@1804";
+        $dbname = "esp_data";
+
+        $con = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+
+        $temperatura = mysqli_query($con, "SELECT temperatura FROM esp_data.temperatura order by id_temp desc limit 1;");
+        $humedad = mysqli_query($con, "SELECT humedad FROM esp_data.humedad order by id_hum desc limit 1;");
+        $humedad_rel = mysqli_query($con, "SELECT humedad_rel FROM esp_data.humedad_rel order by id_humrel desc limit 1;");
+        $uv = mysqli_query($con, "SELECT uv FROM esp_data.uv order by id_uv desc limit 1;");
+
+        $reg_temp=mysqli_fetch_array($temperatura);
+        $reg_hum=mysqli_fetch_array($humedad);
+        $reg_humrel=mysqli_fetch_array($humedad_rel);
+        $reg_uv=mysqli_fetch_array($uv);
+      ?>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
       <div class="row">
@@ -124,7 +143,7 @@
                 <div class="col-8">
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Temperatura</p>
-                    <h5 class="font-weight-bolder">39°</h5>
+                    <h5 class="font-weight-bolder"><?php echo $reg_temp['temperatura']?> °</h5>
                   </div>
                 </div>
                 <div class="col-4 text-end">
@@ -143,7 +162,7 @@
                 <div class="col-8">
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Humedad</p>
-                    <h5 class="font-weight-bolder">54 %</h5>
+                    <h5 class="font-weight-bolder"><?php echo $reg_hum['humedad']?> Ha</h5>
                   </div>
                 </div>
                 <div class="col-4 text-end">
@@ -162,9 +181,7 @@
                 <div class="col-8">
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Humedad suelo</p>
-                    <h5 class="font-weight-bolder">
-                        29 g/m³
-                    </h5>
+                    <h5 class="font-weight-bolder"><?php echo $reg_humrel['humedad_rel']?> Hr</h5>
                   </div>
                 </div>
                 <div class="col-4 text-end">
@@ -183,7 +200,7 @@
                 <div class="col-8">
                   <div class="numbers">
                     <p class="text-sm mb-0 text-uppercase font-weight-bold">UV</p>
-                    <h5 class="font-weight-bolder">3 UVI</h5>
+                    <h5 class="font-weight-bolder"><?php echo $reg_uv['uv']?> IUV</h5>
                   </div>
                 </div>
                 <div class="col-4 text-end">
